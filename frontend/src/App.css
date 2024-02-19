@@ -7,3 +7,41 @@ body {
   color: var(--semi-color-text-0);
   background-color: var(--semi-color-bg-0);
 }
+
+.chatTextArea:hover {
+  background-color: transparent;
+}
+.chatTextArea {
+  border: none;
+}
+.talkGraph {
+  border-radius: var(--semi-border-radius-medium);
+  background-color: var(--semi-color-bg-3);
+  padding: 10px;
+}
+.quesGraph {
+  background-color: var(--semi-color-primary-disabled);
+}
+.listItemReverse .semi-list-item-body {
+  flex-direction: row-reverse !important;
+}
+
+.listItemReverse .semi-list-item-body .semi-list-item-body-header {
+  margin-right: 0;
+  margin-left: 20px;
+}
+
+div::-webkit-scrollbar {
+  width: 6px;
+}
+div::-webkit-scrollbar-track {
+  background: var(--semi-color-bg-1);
+  border-radius: 2px;
+}
+div::-webkit-scrollbar-thumb {
+  background: var(--semi-color-bg-2);
+  border-radius: 10px;
+}
+div::-webkit-scrollbar-thumb:hover {
+  background: var(--semi-color-bg-3);
+}

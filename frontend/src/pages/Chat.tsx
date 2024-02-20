@@ -71,6 +71,9 @@ export default function ChatBox() {
     function reloadEvtSource() {
         evtSourceRef.current = new EventSource("/api/events", { withCredentials: true })
         evtSourceRef.current.onmessage = (event) => {
+            let token = event.data || " "
+
+
             switch (event.data) {
                 case "start":
                     break;
@@ -80,19 +83,15 @@ export default function ChatBox() {
                 default:
                     setList(list => list.map((v, i) =>
                         v.fetching
-                            ? { ...v, content: v.content + event.data }
+                            ? { ...v, content: v.content + token }
                             : v))
                     break;
             }
         }
-        evtSourceRef.current.onerror = (err) => {
+        evtSourceRef.current.onerror = function (err) {
+            alert("message")
             console.log(err);
-
         }
-        evtSourceRef.current.addEventListener("error", (err) => {
-            console.log(err);
-
-        })
     }
 }
 

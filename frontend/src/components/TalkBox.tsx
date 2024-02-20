@@ -1,4 +1,4 @@
-import { List, Avatar, Typography, Spin, Button } from "@douyinfe/semi-ui"
+import { List, Avatar, Typography, Spin, Button, Tag, Banner, Tooltip } from "@douyinfe/semi-ui"
 import { IconAlertCircle } from "@douyinfe/semi-icons"
 import { useContext, useRef } from "react"
 import { utilsContext } from "@/provider/utils"
@@ -58,6 +58,7 @@ function TalkBoxWraper({ name, time, fetching, type, avaUrl }: TalkBoxProps, con
 const TalkBox: React.FC<TalkBoxProps> = function (props) {
 
     let content = <span>{props.content}</span>
+
     if (props.type == ConType.A) {
 
         if (props.content.trim()) {
@@ -65,19 +66,24 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
                 code(props) {
                     const { children, className, node, ...rest } = props
                     const match = /language-(\w+)/.exec(className || '')
+                    let btns = <Button>复制</Button>
                     return match ? (
-                        <SyntaxHighlighter
-                            {...rest}
-                            PreTag="div"
-                            children={String(children).replace(/\n$/, '')}
-                            language={match[1]}
-                            style={a11yDark}
-                        />
+                        <Tooltip showArrow="{false}" content={btns}>
+                            <SyntaxHighlighter
+                                {...rest}
+                                PreTag="div"
+                                children={String(children).replace(/\n$/, '')}
+                                language={match[1]}
+                                style={a11yDark}
+                            />
+                        </Tooltip>
                     ) : (
-                        <code {...rest} className={className}>
-                            {children}
-                        </code>
+                        <Tag className={className} color="light-blue" >{children}</Tag>
                     )
+                },
+                blockquote(props) {
+                    const { children, className, node, ...rest } = props
+                    return <Banner fullMode={false} type="info" icon={null} closeIcon={null}>{children}</Banner>
                 }
             }} />
         } else {

@@ -14,34 +14,29 @@ body {
 .chatTextArea {
   border: none;
 }
-// div::-webkit-scrollbar {
-//   width: 6px;
-// }
-// div::-webkit-scrollbar-track {
-//   background: var(--semi-color-bg-1);
-//   border-radius: 2px;
-// }
-// div::-webkit-scrollbar-thumb {
-//   background: var(--semi-color-bg-2);
-//   border-radius: 10px;
-// }
-// div::-webkit-scrollbar-thumb:hover {
-//   background: var(--semi-color-bg-3);
-// }
+
+@mixin baseBox {
+  border-radius: var(--semi-border-radius-medium);
+  padding: 10px;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  // line-height: 20px;
+  font-size: small;
+}
+
 .leftGraph {
   .contentBox {
     margin-right: 60px;
-    white-space: pre-wrap;
-    margin-left: 0;
-    border-radius: var(--semi-border-radius-medium);
     background-color: var(--semi-color-bg-3);
-    padding: 10px;
-    overflow-wrap: break-word;
+    margin-left: 0;
+
+    @include baseBox();
   }
   .footerInfo {
     text-align: right;
   }
 }
+
 .rightGraph {
   .contentMain {
     display: flex;
@@ -57,12 +52,10 @@ body {
   }
   .contentBox {
     margin-right: 0;
-    white-space: pre-wrap;
     margin-left: 60px;
-    border-radius: var(--semi-border-radius-medium);
     background-color: var(--semi-color-primary-disabled);
-    padding: 10px;
-    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    @include baseBox();
   }
   .footerInfo {
     text-align: right;

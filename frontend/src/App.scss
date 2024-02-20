@@ -1,0 +1,70 @@
+@import "reset-css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  color: var(--semi-color-text-0);
+  background-color: var(--semi-color-bg-0);
+}
+
+.chatTextArea:hover {
+  background-color: transparent;
+}
+.chatTextArea {
+  border: none;
+}
+// div::-webkit-scrollbar {
+//   width: 6px;
+// }
+// div::-webkit-scrollbar-track {
+//   background: var(--semi-color-bg-1);
+//   border-radius: 2px;
+// }
+// div::-webkit-scrollbar-thumb {
+//   background: var(--semi-color-bg-2);
+//   border-radius: 10px;
+// }
+// div::-webkit-scrollbar-thumb:hover {
+//   background: var(--semi-color-bg-3);
+// }
+.leftGraph {
+  .contentBox {
+    margin-right: 60px;
+    white-space: pre-wrap;
+    margin-left: 0;
+    border-radius: var(--semi-border-radius-medium);
+    background-color: var(--semi-color-bg-3);
+    padding: 10px;
+    overflow-wrap: break-word;
+  }
+  .footerInfo {
+    text-align: right;
+  }
+}
+.rightGraph {
+  .contentMain {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .semi-list-item-body {
+    flex-direction: row-reverse !important;
+    .semi-list-item-body-header {
+      margin-right: 0;
+      margin-left: 20px;
+    }
+  }
+  .contentBox {
+    margin-right: 0;
+    white-space: pre-wrap;
+    margin-left: 60px;
+    border-radius: var(--semi-border-radius-medium);
+    background-color: var(--semi-color-primary-disabled);
+    padding: 10px;
+    overflow-wrap: break-word;
+  }
+  .footerInfo {
+    text-align: right;
+  }
+}

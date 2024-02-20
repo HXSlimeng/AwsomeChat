@@ -47,7 +47,7 @@ const Tips: React.FC<{ input: string, setInput: Function, className: any }> = fu
     </label>
 }
 
-const CustomInput: React.FC<{ addQ: (message: string) => void }> = ({ addQ }) => {
+const CustomInput: React.FC<{ addQ: (message: string) => void, genrating: boolean }> = ({ addQ, genrating }) => {
     let [input, setInput] = useState("")
     const inputArea = useRef<HTMLTextAreaElement>(null)
 
@@ -73,10 +73,11 @@ const CustomInput: React.FC<{ addQ: (message: string) => void }> = ({ addQ }) =>
                 style={{ color: "var(--semi-color-text-1)", font: "inherit" }}
                 ref={inputArea}
                 className="w-full text-inherit max-h-96 bg-transparent resize-none border-0  outline-none p-0 whitespace-pre-wrap break-words"
-                placeholder="问你任何想问的问题！">
+                placeholder="问你任何想问的问题！"
+                disabled={genrating}>
             </textarea>
             <Tips input={input} setInput={setInput} className="absolute left-0 pointer-events-none w-full"></Tips>
-            <Button size="large" theme="borderless" className="align-top self-start" icon={<IconSend />}></Button>
+            <Button size="large" theme="borderless" className="align-top self-start" disabled={genrating} icon={<IconSend />}></Button>
         </form>
     </Card>
 

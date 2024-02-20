@@ -31,11 +31,11 @@ fn login(user: Data) {}
 #[get("/events")]
 fn events() -> EventStream![] {
     let answerContent =
-        fs::read_to_string("answer.txt").unwrap_or(String::from("open files error"));
+        fs::read_to_string("answer.md").unwrap_or(String::from("open files error"));
     let stream = EventStream! {
         yield Event::data("start").id("start");
         for s in answerContent.chars() {
-            sleep(Duration::from_millis(30)).await;
+            sleep(Duration::from_millis(20)).await;
             yield Event::data(s.to_string()).id("answer");
         }
         yield Event::data("end").id("end");

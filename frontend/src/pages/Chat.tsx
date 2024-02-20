@@ -1,15 +1,32 @@
-import { Card, Layout, List, Space } from "@douyinfe/semi-ui";
+import { Button, Card, Empty, Layout, List, Space } from "@douyinfe/semi-ui";
 import TalkBox, { ConType, TalkBoxProps } from "@/components/TalkBox";
 import { useRef, useState } from "react";
 import BoxInp from "@/components/BoxInp";
 import { IconPause } from "@douyinfe/semi-icons"
+import { IllustrationNoContent, IllustrationNoContentDark } from "@douyinfe/semi-illustrations"
 
 function Wrapper({ children }: { children: any }) {
     return <Layout className="flex justify-center items-center">{children}</Layout>;
 }
 
 function EmptyContent() {
-    return <div>1234</div>
+    return (
+        <Empty
+            image={<IllustrationNoContent style={{ width: 150, height: 150 }} />}
+            darkModeImage={<IllustrationNoContentDark style={{ width: 150, height: 150 }} />}
+            title="ChatUi"
+            description="开始尝试第一次对话吧"
+        >
+            <div>
+                <Button style={{ padding: '6px 24px', marginRight: 12 }} type="primary">
+                    二级按钮
+                </Button>
+                <Button style={{ padding: '6px 24px' }} theme="solid" type="primary">
+                    一级按钮
+                </Button>
+            </div>
+        </Empty>
+    )
 }
 
 export default function ChatBox() {
@@ -19,7 +36,7 @@ export default function ChatBox() {
     const evtSourceRef = useRef<EventSource | null>(null)
 
     let LoadingCard =
-        <Card shadows="hover" className="w-min absolute bottom-20 " style={{ left: "50%", marginLeft: "-55px" }} bodyStyle={{ textWrap: "nowrap", padding: "10px" }} >
+        <Card shadows="hover" className="w-min absolute bottom-20 z-10" style={{ left: "50%", marginLeft: "-55px" }} bodyStyle={{ textWrap: "nowrap", padding: "10px" }} >
             <div onClick={pauseGen}>
                 <Space align="center" >
                     <IconPause></IconPause>
@@ -30,7 +47,7 @@ export default function ChatBox() {
 
     return (
         <Wrapper>
-            <Card className="relative w-5/6 mt-4 mb-4" bodyStyle={{ padding: 0, height: 500, overflowY: "auto" }} footer={<BoxInp addQ={addConversation} />}>
+            <Card className="relative w-5/6 mt-4 mb-4 cursor-auto" shadows="always" bodyStyle={{ padding: 0, height: 500, overflowY: "auto" }} footer={<BoxInp addQ={addConversation} genrating={genrating} />}>
                 {genrating ? LoadingCard : null}
                 <List split={false}
                     emptyContent={<EmptyContent />}
@@ -68,6 +85,14 @@ export default function ChatBox() {
                     break;
             }
         }
+        evtSourceRef.current.onerror = (err) => {
+            console.log(err);
+
+        }
+        evtSourceRef.current.addEventListener("error", (err) => {
+            console.log(err);
+
+        })
     }
 }
 

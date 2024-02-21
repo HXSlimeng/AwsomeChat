@@ -1,4 +1,4 @@
-import { List, Avatar, Typography, Spin, Button, Tag, Banner, Tooltip, ButtonGroup } from "@douyinfe/semi-ui"
+import { List, Avatar, Typography, Spin, Button, Tag, Banner, Tooltip, ButtonGroup, Toast } from "@douyinfe/semi-ui"
 import { IconAlertCircle, IconCopy, IconEdit } from "@douyinfe/semi-icons"
 import { useContext, useRef } from "react"
 import { utilsContext } from "@/provider/utils"
@@ -27,42 +27,8 @@ let defaultInfo = new Map<ConType, Pick<TalkBoxProps, "avaUrl" | "name">>(
     ]
 )
 
-
-const TalkBoxMain: React.FC<TalkBoxProps & { domContent: JSX.Element }> = function ({ name, type, domContent, time }) {
-    const { Text } = Typography
-    const dayjs = useContext(utilsContext)
-    return (
-        <div className="contentMain">
-            <Text type="tertiary">{name || defaultInfo.get(type)?.name}</Text>
-            <div className="contentBox">
-                {domContent}
-                <div className="footerInfo">
-                    <Text type="quaternary" size="small">{dayjs(time).format("YYYY MM-DD HH:mm:ss")}</Text>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-function TalkBoxWraper(props: TalkBoxProps, domContent: JSX.Element,) {
-    const { avaUrl, type, fetching } = props
-    const { Item } = List
-
-    let main = <TalkBoxMain domContent={domContent} {...props}></TalkBoxMain>
-
-    let header = (
-        <Avatar size={"default"} contentMotion={fetching} border={true}>
-            {avaUrl || defaultInfo.get(type)?.avaUrl}
-        </Avatar>
-    )
-
-    let itemClass = type == ConType.Q ? "rightGraph" : "leftGraph";
-
-    return <Item main={main} header={header} className={itemClass}></Item>;
-}
-
 const TalkBox: React.FC<TalkBoxProps> = function (props) {
-
+    const { Text, Title, Paragraph } = Typography
     let content = <span>{props.content}</span>
 
     let formatComp: Partial<Components> = {
@@ -74,7 +40,7 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
                 //代码块
                 <div className="relative">
                     <ButtonGroup className="absolute right-2 top-2">
-                        <Button icon={<IconCopy />}></Button>
+                        <Button icon={<IconCopy />} onClick={copyCode.bind(this, children)}></Button>
                         <Button icon={<IconEdit />}></Button>
                     </ButtonGroup>
                     <SyntaxHighlighter
@@ -88,14 +54,21 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
                 </div>
             ) : (
                 //行内代码
-                <Tag className={className} color="light-blue" >{children}</Tag>
+                <Text className={className} size="small" code>{children}</Text>
             )
         },
         //引用> 
-        blockquote(props) {
-            const { children, className, node, ...rest } = props
-            return <Banner fullMode={false} type="info" icon={null} closeIcon={null}>{children}</Banner>
-        }
+
+        blockquote: ({ children }) => <Banner fullMode={false} type="info" icon={null} closeIcon={null}>{children}</Banner>,
+        h1: (props) => <Title>{props.children}</Title>,
+        h2: (props) => <Title heading={2}>{props.children}</Title>,
+        h3: (props) => <Title heading={3}>{props.children}</Title>,
+        h4: (props) => <Title heading={4}>{props.children}</Title>,
+        h5: (props) => <Title heading={5}>{props.children}</Title>,
+        p: (props) => <Paragraph spacing="extended" className="my-4">{props.children}</Paragraph>,
+        ol: (props) => <ol className="indent-4">{props.children}</ol>,
+        ul: (props) => <ul className="indent-8">{props.children}</ul>,
+        li: (props) => <li>•{props.children}</li>
     }
 
     if (props.type == ConType.A) {
@@ -114,7 +87,43 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
     }
     return TalkBoxWraper(props, content)
 
+    async function copyCode(content: string | string[]) {
+        content = Array.isArray(content) ? content.join("") : content;
+        await navigator.clipboard.writeText(content)
+        Toast.success("复制成功");
+    }
+}
+function TalkBoxWraper(props: TalkBoxProps, domContent: JSX.Element,) {
+    const { avaUrl, type, fetching } = props
+    const { Item } = List
 
+    let main = <TalkBoxMain domContent={domContent} {...props}></TalkBoxMain>
+
+    let header = (
+        <Avatar size={"default"} contentMotion={fetching} border={true}>
+            {avaUrl || defaultInfo.get(type)?.avaUrl}
+        </Avatar>
+    )
+
+    let itemClass = type == ConType.Q ? "rightGraph" : "leftGraph";
+
+    return <Item main={main} header={header} className={itemClass}></Item>;
+}
+
+const TalkBoxMain: React.FC<TalkBoxProps & { domContent: JSX.Element }> = function ({ name, type, domContent, time }) {
+    const { Text } = Typography
+    const dayjs = useContext(utilsContext)
+    return (
+        <div className="contentMain">
+            <Text type="tertiary">{name || defaultInfo.get(type)?.name}</Text>
+            <div className="contentBox">
+                {domContent}
+                <div className="footerInfo">
+                    <Text type="quaternary" size="small">{dayjs(time).format("YYYY MM-DD HH:mm:ss")}</Text>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default TalkBox

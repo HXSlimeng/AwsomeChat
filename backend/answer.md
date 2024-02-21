@@ -1,3 +1,13 @@
+```javascript
+function foo() {
+  var age = 16;
+  var age = 26;
+  var age = 36;
+  console.log(age);
+}
+foo(); // 36
+```
+
 ## ECMAScript 与 javascript 的关系
 
 > 完整的`JavaScript`包含`核心(ECMAScript)`,`文档对象模型(Dom)` `浏览器对象模型(Bom)`

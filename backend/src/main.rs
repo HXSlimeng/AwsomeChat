@@ -1,8 +1,13 @@
-use std::{fs, time::Duration};
+use std::{
+    fs,
+    io::{BufRead, BufReader},
+    time::Duration,
+};
 
 use rocket::{
     form::Form,
     fs::FileServer,
+    futures::io,
     response::stream::{Event, EventStream, TextStream},
     tokio::time::sleep,
     Data,
@@ -30,15 +35,22 @@ fn login(user: Data) {}
 
 #[get("/events")]
 fn events() -> EventStream![] {
-    let answerContent =
-        fs::read_to_string("answer.md").unwrap_or(String::from("open files error"));
+    let file = fs::File::open("answer.md").unwrap();
+    let reader = BufReader::new(file);
+    let wait = || sleep(Duration::from_millis(20));
+
     let stream = EventStream! {
-        yield Event::data("start").id("start");
-        for s in answerContent.chars() {
-            sleep(Duration::from_millis(20)).await;
-            yield Event::data(s.to_string()).id("answer");
+         yield Event::data("start").id("start");
+        for line in reader.lines() {
+            let line = line.unwrap_or(String::from(""));
+            for char in line.chars(){
+                wait().await;
+                yield Event::data(char.to_string()).id("data");
+            }
+            wait().await;
+            yield Event::data("\n").id("data");
         }
-        yield Event::data("end").id("end");
+    yield Event::data("end").id("end");
     };
     stream.heartbeat(None)
 }

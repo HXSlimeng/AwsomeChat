@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@douyinfe/semi-ui": "^2.52.2",
+    "@types/react-syntax-highlighter": "^15.5.11",
     "dayjs": "^1.11.10",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.3",

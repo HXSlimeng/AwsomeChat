@@ -71,7 +71,9 @@ export default function ChatBox() {
     function reloadEvtSource() {
         evtSourceRef.current = new EventSource("/api/events", { withCredentials: true })
         evtSourceRef.current.onmessage = (event) => {
-            let token = event.data || " "
+            console.log(event.data);
+
+            let token = event.data || ` `
 
 
             switch (event.data) {

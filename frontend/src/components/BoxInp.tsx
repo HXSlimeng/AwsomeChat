@@ -1,5 +1,5 @@
-import { Button, Card, Tag } from "@douyinfe/semi-ui";
-import { IconSend } from "@douyinfe/semi-icons";
+import { Button, Card, Space, Tag } from "@douyinfe/semi-ui";
+import { IconSend, IconPlus, IconPause } from "@douyinfe/semi-icons";
 import React, { useEffect, useRef, useState } from "react"
 
 
@@ -40,47 +40,71 @@ const Tips: React.FC<{ input: string, setInput: Function, className: any }> = fu
         timer.current = setTimeout(setTip.bind(this, currtip), timeout)
     }
 
-    return <label className={className}>
-        <span className="whitespace-pre-wrap">{input}</span>
+    return <label className={className} >
+        <span className="text-transparent">{input}</span>
         <span style={{ color: "var(--semi-color-text-3)" }}>{tip} </span>
         {tip.trim() ? <Tag size="small" onClick={addTip2Inp} className="pointer-events-auto cursor-pointer">Tab</Tag> : null}
     </label>
 }
 
-const CustomInput: React.FC<{ addQ: (message: string) => void, genrating: boolean }> = ({ addQ, genrating }) => {
+const CustomInput: React.FC<{ addQ: (message: string) => void, genrating: boolean, pauseGen: () => void }> = ({ addQ, genrating, pauseGen }) => {
     let [input, setInput] = useState("")
+    let [rows, setRows] = useState<number>(3)
     const inputArea = useRef<HTMLTextAreaElement>(null)
 
+    let LoadingCard =
+        <Card shadows="hover" className="w-min absolute -top-3/4 z-10" style={{ left: "50%", marginLeft: "-55px" }} bodyStyle={{ textWrap: "nowrap", padding: "10px" }} >
+            <div onClick={pauseGen} style={{ color: "rgba(var(--semi-orange-2), 1)" }} >
+                <Space align="center" >
+                    <IconPause></IconPause>
+                    <div style={{ userSelect: "none" }}>正在生成...</div>
+                </Space>
+            </div>
+        </Card>
+
     useEffect(() => {
+        let brNum = Array.from(input.matchAll(/\n/g));
+        setRows(brNum.length + 1 > 3 ? brNum.length + 1 : 3)
+
         let fun = (async (evt: KeyboardEvent) => {
-            if (evt.key == "Enter" && input.trim()) {
-                evt.preventDefault();
-                addQ(input)
-                setInput("")
+            if (evt.key == "Enter") {
+                if (!evt.shiftKey && input.trim()) {
+                    evt.preventDefault();
+                    addQ(input)
+                    setInput("")
+                }
             }
         })
         inputArea.current?.addEventListener("keydown", fun)
+
         return () => inputArea.current?.removeEventListener("keydown", fun)
+
     }, [input])
 
-    return <Card className="flex align-middle relative" bodyStyle={{ padding: 4, width: "100%" }} shadows="always">
-        <form className="relative w-full flex items-center" >
-            <textarea id="customInp"
-                rows={1}
-                autoComplete="off"
-                value={input}
-                onChange={(evt) => setInput(evt.target.value)}
-                style={{ color: "var(--semi-color-text-1)", font: "inherit" }}
-                ref={inputArea}
-                className="w-full text-inherit max-h-96 bg-transparent resize-none border-0  outline-none p-0 whitespace-pre-wrap break-words"
-                placeholder="问你任何想问的问题！"
-                disabled={genrating}>
-            </textarea>
-            <Tips input={input} setInput={setInput} className="absolute left-0 pointer-events-none w-full"></Tips>
-            <Button size="large" theme="borderless" className="align-top self-start" disabled={genrating} icon={<IconSend />}></Button>
-        </form>
-    </Card>
-
+    return (
+        <Space className="w-full" style={{ position: "relative" }} >
+            {genrating ? LoadingCard : ""}
+            <Button theme="solid" type="primary" size="large" icon={<IconPlus />}></Button>
+            <Card className="flex-grow flex" style={{ padding: "12px" }} bodyStyle={{ padding: "0", width: "100%", display: "flex" }} shadows="always">
+                <form className="relative flex flex-grow" >
+                    <textarea id="customInp"
+                        rows={rows}
+                        autoComplete="off"
+                        value={input}
+                        onChange={(evt) => setInput(evt.target.value)}
+                        style={{ color: "var(--semi-color-text-1)", font: "inherit" }}
+                        ref={inputArea}
+                        wrap="hard"
+                        className="text-inherit w-full bg-transparent resize-none border-0  outline-none p-0 whitespace-pre-wrap break-words"
+                        placeholder="问你任何想问的问题！"
+                        disabled={genrating}>
+                    </textarea>
+                    <Tips input={input} setInput={setInput} className="absolute left-0  pointer-events-none w-full whitespace-pre-wrap break-words "></Tips>
+                </form>
+                <Button theme="solid" className="self-end" disabled={genrating} icon={<IconSend />}>发送</Button>
+            </Card>
+        </Space>
+    )
 }
 
 export default CustomInput

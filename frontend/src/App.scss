@@ -14,6 +14,8 @@ body {
 .chatTextArea {
   border: none;
 }
+#customInp {
+}
 
 @mixin baseBox {
   border-radius: var(--semi-border-radius-medium);

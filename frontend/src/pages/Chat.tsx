@@ -1,15 +1,16 @@
-import { Button, Card, Empty, Layout, List, Space } from "@douyinfe/semi-ui";
+import { Card, Empty, Layout, List, Space, Typography } from "@douyinfe/semi-ui";
 import TalkBox, { ConType, TalkBoxProps } from "@/components/TalkBox";
 import { useRef, useState } from "react";
 import BoxInp from "@/components/BoxInp";
-import { IconPause } from "@douyinfe/semi-icons"
 import { IllustrationNoContent, IllustrationNoContentDark } from "@douyinfe/semi-illustrations"
+import { Title } from "@douyinfe/semi-ui/lib/es/skeleton/item";
 
 function Wrapper({ children }: { children: any }) {
     return <Layout className="flex justify-center items-center">{children}</Layout>;
 }
 
 function EmptyContent() {
+    const { Text } = Typography
     return (
         <Empty
             image={<IllustrationNoContent style={{ width: 150, height: 150 }} />}
@@ -17,38 +18,24 @@ function EmptyContent() {
             title="ChatUi"
             description="开始尝试第一次对话吧"
         >
-            <div>
-                <Button style={{ padding: '6px 24px', marginRight: 12 }} type="primary">
-                    二级按钮
-                </Button>
-                <Button style={{ padding: '6px 24px' }} theme="solid" type="primary">
-                    一级按钮
-                </Button>
-            </div>
         </Empty>
     )
 }
 
 export default function ChatBox() {
+    const { Title } = Typography
     const [list, setList] = useState<TalkBoxProps[]>([]);
     const [genrating, setGenrating] = useState(false);
 
     const evtSourceRef = useRef<EventSource | null>(null)
 
-    let LoadingCard =
-        <Card shadows="hover" className="w-min absolute bottom-20 z-10" style={{ left: "50%", marginLeft: "-55px" }} bodyStyle={{ textWrap: "nowrap", padding: "10px" }} >
-            <div onClick={pauseGen}>
-                <Space align="center" >
-                    <IconPause></IconPause>
-                    <div style={{ userSelect: "none" }}>正在生成...</div>
-                </Space>
-            </div>
-        </Card>
-
     return (
         <Wrapper>
-            <Card className="relative w-5/6 mt-4 mb-4 cursor-auto" shadows="always" bodyStyle={{ padding: 0, height: 500, overflowY: "auto" }} footer={<BoxInp addQ={addConversation} genrating={genrating} />}>
-                {genrating ? LoadingCard : null}
+            <Card className="relative w-5/6 mt-4 mb-4 cursor-auto"
+                shadows="always"
+                header={<Title heading={4} color="tertiary" content="ChatUi" >ChatUi</Title>}
+                bodyStyle={{ padding: 0, height: 500, overflowY: "auto", position: "relative" }}
+                footer={<BoxInp addQ={addConversation} genrating={genrating} pauseGen={pauseGen} />}>
                 <List split={false}
                     emptyContent={<EmptyContent />}
                     dataSource={list}

@@ -58,17 +58,14 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
             )
         },
         //引用> 
-
         blockquote: ({ children }) => <Banner fullMode={false} type="info" icon={null} closeIcon={null}>{children}</Banner>,
-        h1: (props) => <Title>{props.children}</Title>,
-        h2: (props) => <Title heading={2}>{props.children}</Title>,
-        h3: (props) => <Title heading={3}>{props.children}</Title>,
-        h4: (props) => <Title heading={4}>{props.children}</Title>,
-        h5: (props) => <Title heading={5}>{props.children}</Title>,
         p: (props) => <Paragraph spacing="extended" className="my-4">{props.children}</Paragraph>,
         ol: (props) => <ol className="indent-4">{props.children}</ol>,
         ul: (props) => <ul className="indent-8">{props.children}</ul>,
         li: (props) => <li>•{props.children}</li>
+    }
+    for (let index: any = 1; index < 7; index++) {
+        Reflect.set(formatComp, `h${index}`, (props: any) => <Title heading={index}>{props.children}</Title>)
     }
 
     if (props.type == ConType.A) {

@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Login from "@/pages/Login";
 import Home from "@/pages/Home";
 import ChatBox from "@/pages/Chat";
@@ -8,6 +8,7 @@ export default createBrowserRouter([
   {
     path: PageEnum.Login,
     element: <Login></Login>,
+
   },
   {
     path: PageEnum.Home,
@@ -21,4 +22,8 @@ export default createBrowserRouter([
     path: PageEnum.Page404,
     element: <div>not found</div>,
   },
+  {
+    path: "/",
+    element: <Navigate to={PageEnum.Chat}></Navigate>
+  }
 ]);

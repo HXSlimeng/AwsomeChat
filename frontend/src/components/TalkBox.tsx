@@ -1,6 +1,6 @@
 import { List, Avatar, Typography, Spin, Button, Tag, Banner, Tooltip, ButtonGroup, Toast } from "@douyinfe/semi-ui"
 import { IconAlertCircle, IconCopy, IconEdit } from "@douyinfe/semi-icons"
-import { useContext, useRef } from "react"
+import { useContext } from "react"
 import { utilsContext } from "@/provider/utils"
 import Markdown, { Components } from "react-markdown"
 import { Prism as SyntaxHighlighter, SyntaxHighlighterProps } from 'react-syntax-highlighter'
@@ -82,7 +82,7 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
             }
         }
     }
-    return TalkBoxWraper(props, content)
+    return <TalkBoxWraper {...props}>{content}</TalkBoxWraper>
 
     async function copyCode(content: string | string[]) {
         content = Array.isArray(content) ? content.join("") : content;
@@ -90,31 +90,30 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
         Toast.success("复制成功");
     }
 }
-function TalkBoxWraper(props: TalkBoxProps, domContent: JSX.Element,) {
+const TalkBoxWraper: React.FC<TalkBoxProps & { children: any }> = function (props) {
     const { avaUrl, role, fetching } = props
     const { Item } = List
 
-    let main = <TalkBoxMain domContent={domContent} {...props}></TalkBoxMain>
+    let main = <TalkBoxMain  {...props}>{props.children}</TalkBoxMain>
 
     let header = (
         <Avatar size={"default"} contentMotion={fetching} border={true}>
             {avaUrl || defaultInfo.get(role)?.avaUrl}
         </Avatar>
     )
-
     let itemClass = role == ConRole.Q ? "rightGraph" : "leftGraph";
 
     return <Item main={main} header={header} className={itemClass}></Item>;
 }
 
-const TalkBoxMain: React.FC<TalkBoxProps & { domContent: JSX.Element }> = function ({ name, role, domContent, time }) {
+const TalkBoxMain: React.FC<TalkBoxProps & { children: any }> = function ({ name, role, time, children }) {
     const { Text } = Typography
     const dayjs = useContext(utilsContext)
     return (
         <div className="contentMain">
             <Text type="tertiary">{name || defaultInfo.get(role)?.name}</Text>
             <div className="contentBox">
-                {domContent}
+                {children}
                 <div className="footerInfo">
                     <Text type="quaternary" size="small">{dayjs(time).format("YYYY MM-DD HH:mm:ss")}</Text>
                 </div>

@@ -1,5 +1,4 @@
-import { Button, Card, Space, Tag } from "@douyinfe/semi-ui";
-import { IconSend, IconPlus, IconPause } from "@douyinfe/semi-icons";
+import { Tag } from "@douyinfe/semi-ui";
 import React, { useEffect, useRef, useState } from "react"
 
 
@@ -47,20 +46,10 @@ const Tips: React.FC<{ input: string, setInput: Function, className: any }> = fu
     </label>
 }
 
-const CustomInput: React.FC<{ addQ: (message: string) => void, genrating: boolean, pauseGen: () => void }> = ({ addQ, genrating, pauseGen }) => {
+const CustomInput: React.FC<{ addQ: (message: string) => void, chatable: boolean }> = ({ addQ, chatable }) => {
     let [input, setInput] = useState("")
     let [rows, setRows] = useState<number>(3)
     const inputArea = useRef<HTMLTextAreaElement>(null)
-
-    let LoadingCard =
-        <Card shadows="hover" className="w-min absolute -top-3/4 z-10" style={{ left: "50%", marginLeft: "-55px" }} bodyStyle={{ textWrap: "nowrap", padding: "10px" }} >
-            <div onClick={pauseGen} style={{ color: "rgba(var(--semi-orange-2), 1)" }} >
-                <Space align="center" >
-                    <IconPause></IconPause>
-                    <div style={{ userSelect: "none" }}>正在生成...</div>
-                </Space>
-            </div>
-        </Card>
 
     useEffect(() => {
         let brNum = Array.from(input.matchAll(/\n/g));
@@ -76,34 +65,26 @@ const CustomInput: React.FC<{ addQ: (message: string) => void, genrating: boolea
             }
         })
         inputArea.current?.addEventListener("keydown", fun)
-
         return () => inputArea.current?.removeEventListener("keydown", fun)
-
     }, [input])
 
     return (
-        <Space className="w-full" style={{ position: "relative" }} >
-            {genrating ? LoadingCard : ""}
-            <Button theme="solid" type="primary" size="large" icon={<IconPlus />}></Button>
-            <Card className="flex-grow flex" style={{ padding: "12px" }} bodyStyle={{ padding: "0", width: "100%", display: "flex" }} shadows="always">
-                <form className="relative flex flex-grow" >
-                    <textarea id="customInp"
-                        rows={rows}
-                        autoComplete="off"
-                        value={input}
-                        onChange={(evt) => setInput(evt.target.value)}
-                        style={{ color: "var(--semi-color-text-1)", font: "inherit" }}
-                        ref={inputArea}
-                        wrap="hard"
-                        className="text-inherit w-full bg-transparent resize-none border-0  outline-none p-0 whitespace-pre-wrap break-words"
-                        placeholder="问你任何想问的问题！"
-                        disabled={genrating}>
-                    </textarea>
-                    <Tips input={input} setInput={setInput} className="absolute left-0  pointer-events-none w-full whitespace-pre-wrap break-words "></Tips>
-                </form>
-                <Button theme="solid" className="self-end" disabled={genrating} icon={<IconSend />}>发送</Button>
-            </Card>
-        </Space>
+
+        <form className="relative flex flex-grow" >
+            <textarea id="customInp"
+                rows={rows}
+                autoComplete="off"
+                value={input}
+                onChange={(evt) => setInput(evt.target.value)}
+                style={{ color: "var(--semi-color-text-1)", font: "inherit" }}
+                ref={inputArea}
+                wrap="hard"
+                className="text-inherit w-full bg-transparent resize-none border-0  outline-none p-0 whitespace-pre-wrap break-words"
+                placeholder="问你任何想问的问题！"
+                disabled={!chatable}>
+            </textarea>
+            <Tips input={input} setInput={setInput} className="absolute left-0  pointer-events-none w-full whitespace-pre-wrap break-words "></Tips>
+        </form>
     )
 }
 

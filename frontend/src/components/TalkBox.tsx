@@ -6,24 +6,24 @@ import Markdown, { Components } from "react-markdown"
 import { Prism as SyntaxHighlighter, SyntaxHighlighterProps } from 'react-syntax-highlighter'
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
-export enum ConType {
-    Q,
-    A
+export enum ConRole {
+    Q = 'user',
+    A = 'assistant'
 }
 
 export type TalkBoxProps = {
     avaUrl?: string,
     name?: string,
     content: string,
-    type: ConType
+    role: ConRole
     time: number
     fetching?: boolean
 }
 
-let defaultInfo = new Map<ConType, Pick<TalkBoxProps, "avaUrl" | "name">>(
+let defaultInfo = new Map<ConRole, Pick<TalkBoxProps, "avaUrl" | "name">>(
     [
-        [ConType.Q, { avaUrl: "👨‍🦱", name: "You" }],
-        [ConType.A, { avaUrl: "🤖", name: "Robot" }]
+        [ConRole.Q, { avaUrl: "👨‍🦱", name: "You" }],
+        [ConRole.A, { avaUrl: "🤖", name: "Robot" }]
     ]
 )
 
@@ -68,7 +68,7 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
         Reflect.set(formatComp, `h${index}`, (props: any) => <Title heading={index}>{props.children}</Title>)
     }
 
-    if (props.type == ConType.A) {
+    if (props.role == ConRole.A) {
 
         if (props.content.trim()) {
             content = <Markdown children={`${props.content}`} components={formatComp} />
@@ -91,28 +91,28 @@ const TalkBox: React.FC<TalkBoxProps> = function (props) {
     }
 }
 function TalkBoxWraper(props: TalkBoxProps, domContent: JSX.Element,) {
-    const { avaUrl, type, fetching } = props
+    const { avaUrl, role, fetching } = props
     const { Item } = List
 
     let main = <TalkBoxMain domContent={domContent} {...props}></TalkBoxMain>
 
     let header = (
         <Avatar size={"default"} contentMotion={fetching} border={true}>
-            {avaUrl || defaultInfo.get(type)?.avaUrl}
+            {avaUrl || defaultInfo.get(role)?.avaUrl}
         </Avatar>
     )
 
-    let itemClass = type == ConType.Q ? "rightGraph" : "leftGraph";
+    let itemClass = role == ConRole.Q ? "rightGraph" : "leftGraph";
 
     return <Item main={main} header={header} className={itemClass}></Item>;
 }
 
-const TalkBoxMain: React.FC<TalkBoxProps & { domContent: JSX.Element }> = function ({ name, type, domContent, time }) {
+const TalkBoxMain: React.FC<TalkBoxProps & { domContent: JSX.Element }> = function ({ name, role, domContent, time }) {
     const { Text } = Typography
     const dayjs = useContext(utilsContext)
     return (
         <div className="contentMain">
-            <Text type="tertiary">{name || defaultInfo.get(type)?.name}</Text>
+            <Text type="tertiary">{name || defaultInfo.get(role)?.name}</Text>
             <div className="contentBox">
                 {domContent}
                 <div className="footerInfo">

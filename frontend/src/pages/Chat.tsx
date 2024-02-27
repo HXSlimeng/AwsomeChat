@@ -49,6 +49,7 @@ export default function ChatBox() {
     const [genrating, setGenrating] = useState(false);
     const dispatch = useDispatch()
     const accessToken = useSelector<RootType>(state => state.llmSlice.accessToken)
+
     const hasToken = Boolean(accessToken)
     const chatable = useMemo(() => !genrating && hasToken, [genrating, hasToken])
 
@@ -57,6 +58,7 @@ export default function ChatBox() {
     useEffect(() => {
         dispatch(getLLMtoken({ client_secret: "WNRjQ1VcqsYg32jHbD55L7nVQl8ZBwZI", client_id: "n2KW7R48Mk1hXanza1cIhMc9" }) as unknown as UnknownAction);
     }, [])
+
     let LoadingCard =
         <Card shadows="hover" className="w-min absolute -top-3/4 z-10" style={{ left: "50%", marginLeft: "-55px" }} bodyStyle={{ textWrap: "nowrap", padding: "10px" }} >
             <div onClick={pauseGen} style={{ color: "rgba(var(--semi-orange-2), 1)" }} >
@@ -69,7 +71,7 @@ export default function ChatBox() {
 
     let ChatFooter = <Space className="w-full" style={{ position: "relative" }} >
         {genrating ? LoadingCard : ""}
-        <Button theme="solid" type="primary" size="large" icon={<IconPlus />}></Button>
+        <Button theme="solid" type="primary" size="large" icon={<IconPlus />} disabled={!chatable} onClick={newConversation}></Button>
         <Card className="flex-grow flex" style={{ padding: "12px" }} bodyStyle={{ padding: "0", width: "100%", display: "flex" }} shadows="always">
             <BoxInp chatable={chatable} addQ={addConversation}></BoxInp>
             <Button theme="solid" className="self-end" disabled={!chatable} icon={<IconSend />}>发送</Button>
@@ -103,7 +105,7 @@ export default function ChatBox() {
         // reloadEvtSource()
     }
     function newConversation() {
-
+        setList([]);
     }
     function endGen() {
         setGenrating(false)

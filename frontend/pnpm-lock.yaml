@@ -11,6 +11,9 @@ dependencies:
   '@douyinfe/semi-icons-lab':
     specifier: ^2.53.2
     version: 2.53.2(react-dom@18.2.0)(react@18.2.0)
+  '@douyinfe/semi-illustrations':
+    specifier: ^2.55.1
+    version: 2.55.1(react@18.2.0)
   '@douyinfe/semi-ui':
     specifier: ^2.52.2
     version: 2.53.2(react-dom@18.2.0)(react@18.2.0)
@@ -214,6 +217,14 @@ packages:
 
   /@douyinfe/semi-illustrations@2.53.2(react@18.2.0):
     resolution: {integrity: sha512-vYgt4eQcnYCPWgJQg7QUIrz2teKoZ3Iwg/rLcpgL6NT4YKY7TDNeUN1ROwO1FpGqaBv2Mcfcr5BNo1siOJDIdg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /@douyinfe/semi-illustrations@2.55.1(react@18.2.0):
+    resolution: {integrity: sha512-1kOCZibrOoUiNT45gMQfxxA/zMZ7SvH8lIw2cdWpXpCS07nSifNKcqkqnjDCfp15TnloCjdu1mw1E+EUxyh8BA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:

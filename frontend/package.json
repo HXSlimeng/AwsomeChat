@@ -10,6 +10,7 @@
   "dependencies": {
     "@douyinfe/semi-icons": "^2.55.1",
     "@douyinfe/semi-icons-lab": "^2.53.2",
+    "@douyinfe/semi-illustrations": "^2.55.1",
     "@douyinfe/semi-ui": "^2.52.2",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@reduxjs/toolkit": "^2.2.1",

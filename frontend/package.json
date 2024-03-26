@@ -8,8 +8,10 @@
     "preview": "rsbuild preview"
   },
   "dependencies": {
+    "@douyinfe/semi-icons": "^2.55.1",
     "@douyinfe/semi-icons-lab": "^2.53.2",
     "@douyinfe/semi-ui": "^2.52.2",
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@reduxjs/toolkit": "^2.2.1",
     "@types/react-syntax-highlighter": "^15.5.11",
     "dayjs": "^1.11.10",
